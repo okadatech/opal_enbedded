@@ -1,0 +1,2 @@
+can_ibis.c:11:6:can_init	56	static
+can_ibis.c:30:6:can_send	16	static
