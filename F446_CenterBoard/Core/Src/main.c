@@ -133,7 +133,7 @@ int main(void)
   HAL_UART_Receive_DMA(&huart2,(uint8_t *)Rxbuf_from_ESP32,Rxbufsize_from_ESP32);
   HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 0);
   HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, 0);
-  mpu9250_init(&hspi2);
+  //mpu9250_init(&hspi2);
 
   while(1){
       	if(EN_front==1 && EN_rear==1){break;}
@@ -164,11 +164,11 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
 
-	  printf(" slot=%f",slot);
-	  printf(" slot_out=%f",slot_data);
+	  //printf(" slot=%f",slot);
+	  //printf(" slot_out=%f",slot_data);
 
-	  printf(" state=%d",state);
-	  printf(" speed=%f",speed);
+	  //printf(" state=%d",state);
+	  //printf(" speed=%f",speed);
 	  //printf(" C=%d",Craction_in);
 	  //printf(" F=%d",Flont_Lamp_in);
 	  //printf(" B=%d",Break_in);
@@ -181,9 +181,9 @@ int main(void)
 	  printf(" 2=%d",Rxbuf_from_ESP32[2]);
 	  printf(" 3=%d",Rxbuf_from_ESP32[3]);
 	  printf(" 4=%d",Rxbuf_from_ESP32[4]);*/
-	  printf(" 0=%d",data_from_esp32[0]);
-	  printf(" 1=%d",data_from_esp32[1]);
-	  printf(" 2=%d",data_from_esp32[2]);
+	  //printf(" 0=%d",data_from_esp32[0]);
+	  //printf(" 1=%d",data_from_esp32[1]);
+	  //printf(" 2=%d",data_from_esp32[2]);
 	  //printf(" 3=%d",data_from_esp32[3]);
 	  //printf(" 3=%d",data_from_esp32[3]);
 	  //printf(" Yaw=%f",gyro_data[0]);
@@ -201,7 +201,7 @@ int main(void)
 	  printf(" Rol=%7.4f",rol);
 	  printf(" Pit=%7.4f",pit);*/
 
-	  printf("\r\n");
+	  //printf("\r\n");
 
 	  HAL_IWDG_Refresh(&hiwdg);
 
@@ -301,7 +301,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	//mode=data_from_esp32[0];
-	mode=4;
+	//mode=1;
 
 	if(mode==1){
 		slot_data=map(slot,0.650,3.265,0.9,3.5);//norm}
@@ -331,7 +331,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	float setvalue1=(4095.0/9.9)*slot_data;
 	float setvalue2=(4095.0/9.9)*slot_data;
 
-	//if(EN==1){
+	if(EN==1){
 		if(mode==4){//sport
 			if(speed==0.0) {
 				setvalue1=(4095.0/9.9)*slot_data;
@@ -410,11 +410,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, (int)setvalue1);
 			HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, (int)setvalue2);
 		}
-	//}
-	//else{
-	//	HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 0);
-	//	HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, 0);
-	//}
+	}
+	else{
+		HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 0);
+		HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, 0);
+	}
 
 	uint8_t senddata[5];
 	senddata[0]=254;
