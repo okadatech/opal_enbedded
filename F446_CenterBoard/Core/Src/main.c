@@ -300,7 +300,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	//mode=data_from_esp32[0];
+	mode=data_from_esp32[0];
 	//mode=1;
 
 	if(mode==1){
@@ -533,6 +533,8 @@ void Error_Handler(void)
 
 	HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 0);
 	HAL_DAC_SetValue(&hdac, DAC_CHANNEL_2, DAC_ALIGN_12B_R, 0);
+
+	//NVIC_SystemReset();
   /* USER CODE END Error_Handler_Debug */
 }
 
