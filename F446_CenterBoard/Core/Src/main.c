@@ -76,7 +76,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan);
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 
 uint8_t Craction_in,Break_in,Flont_Lamp_in,Key_in,EX_in,Winker_L_in,Winker_R_in;
-uint8_t state,cnt,connect,EN,EN_rear,EN_front,mode;
+uint8_t state,cnt,connect,bconnect,EN,EN_rear,EN_front,mode,bmode;
 float slot,speed,slot_data;
 float rol,pit,pit_acc,rol_acc,pit_temp,rol_temp;
 
@@ -143,6 +143,7 @@ int main(void)
       }
 
   connect=0;
+	bconnect=0;
   DFPlayer_init(&huart3);
   HAL_Delay(500);
   DFPlayer_setvolume(0x40);
@@ -301,6 +302,10 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	mode=data_from_esp32[0];
+	if(mode!=bmode){
+		DFPlayer_playmp3(5);//操作音
+		bmode=data_from_esp32[0];
+	}
 	//mode=1;
 
 	if(mode==1){
@@ -455,25 +460,65 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	rol_temp=rol;*/
 
 	if(data_from_esp32[1]>0){
-		if(connect==0){
-			if(data_from_esp32[1]==1){
-				DFPlayer_playmp3(6);
-				EN=1;
+		connect=data_from_esp32[1];
+		if(connect!=bconnect){
+				bconnect=data_from_esp32[1];
+				switch(data_from_esp32[1]){
+				case 1:{
+					//解錠
+					DFPlayer_playmp3(5);//操作音
+					EN=1;
+					break;
+				}
+				case 2:{
+					//拒否
+					DFPlayer_playmp3(1);
+					EN=0;
+					break;
+				}
+				case 3:{
+					//適性ユーザー(接続のみ)
+					DFPlayer_playmp3(6);
+					EN=0;
+					break;
+				}
+				default:{
+					EN=0;
+					break;
+				}
 			}
-			else{
-				EN=0;
-				DFPlayer_playmp3(1);
-			}
-		}
-		connect=1;
+		}	
+		
 	}
 	else{
-		if(connect==1){
+		if(connect>0){
 			DFPlayer_playmp3(3);
 		}
 		connect=0;
+		bconnect=0;
 		EN=0;
 	}
+	
+	// if(data_from_esp32[1]>0){
+	// 	if(connect==0){
+	// 		if(data_from_esp32[1]==1){
+	// 			DFPlayer_playmp3(6);
+	// 			EN=1;
+	// 		}
+	// 		else{
+	// 			EN=0;
+	// 			DFPlayer_playmp3(1);
+	// 		}
+	// 	}
+	// 	connect=1;
+	// }
+	// else{
+	// 	if(connect==1){
+	// 		DFPlayer_playmp3(3);
+	// 	}
+	// 	connect=0;
+	// 	EN=0;
+	// }
 
 
 }

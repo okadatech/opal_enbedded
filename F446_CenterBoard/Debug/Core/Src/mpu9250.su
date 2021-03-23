@@ -7,13 +7,13 @@ mpu9250.c:175:14:mpu9250_set_gyro_scale	24	static
 mpu9250.c:204:14:mpu9250_whoami	16	static
 mpu9250.c:219:6:mpu9250_read_acc	24	static
 mpu9250.c:252:6:mpu9250_read_gyro	24	static
-mpu9250.c:285:6:mpu9250_read_temp	24	static
+mpu9250.c:285:6:mpu9250_read_temp	32	static
 mpu9250.c:306:6:mpu9250_calib_acc	16	static
 mpu9250.c:324:9:mpu9250_AK8963_whoami	16	static
 mpu9250.c:339:6:mpu9250_calib_mag	24	static
 mpu9250.c:381:6:mpu9250_read_mag	24	static
 mpu9250.c:400:9:mpu9250_get_CNTL1	8	static
-mpu9250.c:409:6:mpu9250_read_all	48	static
+mpu9250.c:409:6:mpu9250_read_all	56	static
 mpu9250.c:446:6:mpu9250_calibrate	104	static
 mpu9250.c:591:6:mpu9250_select	8	static
 mpu9250.c:600:6:mpu9250_deselect	8	static
